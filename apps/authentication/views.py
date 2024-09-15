@@ -73,4 +73,8 @@ def register_user(request):
     else:
         form = SignUpForm()
 
-    return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
+    return render(request, "authentication/register.html", {"form": form, "msg": msg, "success": success})
+
+
+def password_reset(request):
+    return render(request,"authentication/page-forgot-password.html" )
