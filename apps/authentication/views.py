@@ -14,10 +14,16 @@ from django.utils.http import urlsafe_base64_encode
 from .backends import EmailBackend
 from .forms import LoginForm, SignUpForm, RegisterForm
 import logging
+from django.contrib.sites.shortcuts import get_current_site
 from apps.utils import get_site_scheme_and_domain
 from .tokens import account_activation_token
+from django.utils.encoding import force_bytes,force_str as force_text
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.contrib.auth import get_user_model
+from apps.authentication.models import *
 
 from ..utils import generate_username
+from django.contrib.auth import logout as auth_logout
 
 logger = logging.getLogger("django")
 
@@ -36,67 +42,6 @@ def start(request):
     request.session["type_account"] = type_account
 
     return redirect("confidentiality")
-
-
-def verify_email(email):
-    """Send verification mail"""
-
-    # site_scheme, site_domain = get_site_scheme_and_domain(request)
-
-    from_email = (
-        "Restaurant Managment"
-    )
-    mail_subject = "Account Registration Confirmation"
-    to_email = email
-
-    # msge = render_to_string(
-    #     "authentication/register_common/acc_active_email.txt",
-    #     {
-    #         "username": user.username,
-    #         "url": reverse(
-    #             "activate",
-    #             kwargs={
-    #                 "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
-    #                 "token": account_activation_token.make_token(user),
-    #             },
-    #         ),
-    #         "domain": site_domain,
-    #         "scheme": site_scheme,
-    #     },
-    # )
-    #
-    # msge_html = render_to_string(
-    #     "authentication/register_common/acc_active_email.html",
-    #     {
-    #         "username": user.username,
-    #         "url": reverse(
-    #             "activate",
-    #             kwargs={
-    #                 "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
-    #                 "token": account_activation_token.make_token(user),
-    #             },
-    #         ),
-    #         "domain": site_domain,
-    #         "scheme": site_scheme,
-    #     },
-    # )
-
-    send_mail(
-        "Subject here",
-        "Here is the message.",
-        "amedeelougbegnon3@gmail.com",
-        [email],
-        fail_silently=False,
-    )
-
-    # send_mail(
-    #     mail_subject,
-    #     msge,
-    #     from_email,
-    #     [to_email],
-    #     fail_silently=False,
-    #     html_message=msge_html,
-    # )
 
 
 def login_view(request):
@@ -162,7 +107,7 @@ def login_view(request):
                     # else:
                     #   return redirect("register_individual")
                     print("Je suis bien connecté et je suis redirigé")
-                    return redirect("home")
+                    return redirect("index")
                 else:
                     msg = "Please confirm your email before logging in."
                     print(msg)
@@ -218,6 +163,28 @@ def register_user(request):
             print('Account created successfully!')
             logger.info(f"User model {user.id} saved")
 
+            # Send verification mail. Handle any exception that could occur.
+            try:
+                verify_email(user, request)
+                logger.info(f"Send verification email for {user.username}")
+                logger.info(f"Send New User {user.username} notification to Project...")
+
+                send_mail(
+                    user.username + " registered to Restaurant App",
+                    "A new user ("
+                    + user.username
+                    + ") with email "
+                    + " has registered to Restaurant App",
+                    "amedeelougbegnon3@gmail.com",
+                    ['lougbegnona@gmail.com'],
+                    fail_silently=False,
+                )
+
+                return redirect('/login/')
+            except Exception as e:
+                print(e)
+                logger.error(f"Error sending the verification message: {e}")
+
             return redirect("/login/")
 
         else:
@@ -235,6 +202,58 @@ def register_user(request):
     return render(request, "authentication/register.html", context)
 
 
+def verify_email(user, request):
+    """Send verification mail"""
+    # from apps.authentication.views.utils import get_site_scheme_and_domain
+
+    site_domain = get_current_site(request)
+
+    from_email = (
+            "Restaurant App <" + "amedeelougbegnon3@gmail.com" + ">"
+    )
+    mail_subject = "Account Registration Confirmation"
+    to_email = user.email
+
+    msge = render_to_string(
+      "authentication/acc_active_email.txt",
+      {
+        "username": user.username,
+        "url": reverse(
+          "activate",
+          kwargs={
+            "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
+            "token": account_activation_token.make_token(user),
+          },
+        ),
+        "domain": site_domain,
+        "scheme": "http",
+      },
+    )
+
+    msge_html = render_to_string(
+      "authentication/acc_active_email.html",
+      {
+        "username": user.username,
+        "url": reverse(
+          "activate",
+          kwargs={
+            "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
+            "token": account_activation_token.make_token(user),
+          },
+        ),
+        "domain": site_domain,
+        "scheme": "http",
+      },
+    )
+    send_mail(
+      mail_subject,
+      msge,
+      from_email,
+      [to_email],
+      fail_silently=False,
+      html_message=msge_html,
+    )
+
 def user_profile(request):
     context = {
 
@@ -245,3 +264,26 @@ def user_profile(request):
 
 def password_reset(request):
     return render(request,"authentication/page-forgot-password.html" )
+
+def activate(request, uidb64, token):
+    response = None
+    try:
+      uid = force_text(urlsafe_base64_decode(uidb64))
+      user = get_user_model().objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+      user = None
+    if user is not None and account_activation_token.check_token(user, token):
+      user.is_active = True
+      user.save()
+      response = "Thank you for confirming your email. Your account has been activated."
+    return render(
+      request,
+      "authentication/account_activation_status.html",
+      {"response": response},
+    )
+
+
+def logout_view(request):
+    auth_logout(request)
+    response = redirect("login")
+    return response

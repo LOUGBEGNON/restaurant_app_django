@@ -11,4 +11,5 @@ from apps.authentication.views import *
 
 urlpatterns = [
     path('dashboard/', index, name="index"),
+    path('support/', support, name="support"),
 ]

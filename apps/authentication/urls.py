@@ -13,9 +13,10 @@ urlpatterns = [
     # path('dashboard/', login_view, name="login"),
     path('login/', login_view, name="login"),
     path('register/', register_user, name="register"),
+    path('register/account-activation/<uidb64>/<token>', activate, name="activate"),
     path("registration/account-types/", choice_account, name="choice_account"),
     path("registration/account-type-checking/", start, name="start"),
     path('auth/password_reset', password_reset, name="password_reset"),
-    path("logout/", LogoutView.as_view(), name="logout"),
+    path("logout/", logout_view, name="logout"),
     path("user/profile", user_profile, name="profile"),
 ]
