@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,12 +26,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qno8#d9&+o#o=%uw+v7ko-dbr8^gjpigqerga+3=p%!#+2wzvh'
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+PROJECT_RESTAURANT_MASTER_KEY = os.getenv("PROJECT_RESTAURANT_MASTER_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -45,9 +53,25 @@ INSTALLED_APPS = [
     "phonenumber_field",
 
     # Local modules
-    "apps.authentication",  # Enable the inner app
-    "apps.home"
+    "apps.authentication",  # Enable the inner dashboard
+    "apps.home",
+    "apps.app",
 ]
+
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp-relay.brevo.com"
+# EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "7cf003001@smtp-brevo.com"
+# EMAIL_HOST_USER = "layfernand@gmail.com"
+EMAIL_HOST_PASSWORD = "pSTXvELBzqR49NFH"
+# EMAIL_HOST_PASSWORD = "Inform@tique310301!"
+EMAIL_PORT = 587
+# EMAIL_PORT = 465
+EMAIL_USE_TLS = True
+# EMAIL_USE_TLS = False
+# EMAIL_USE_SSL = True
+# EMAIL_USE_SSL = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -61,9 +85,16 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = "authentication.User"
 
+AUTHENTICATION_BACKENDS = (
+    "apps.authentication.backends.EmailBackend",
+    "rules.permissions.ObjectPermissionBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
+
 ROOT_URLCONF = 'restaurant_app_django.urls'
-# LOGIN_REDIRECT_URL = "default_home"  # Route defined in app/urls.py
-# LOGOUT_REDIRECT_URL = "default_home"  # Route defined in app/urls.py
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = "login"  # Route defined in dashboard/urls.py
+LOGOUT_REDIRECT_URL = "logout"  # Route defined in dashboard/urls.py
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")  # ROOT dir for templates
 
 TEMPLATES = [

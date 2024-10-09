@@ -82,14 +82,18 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     """User model."""
 
-    INDIVIDUAL = 1
-    MUNICIPALITY = 2
-    COMPANY = 3
-    STAFF = 4
+    USER = 1
+    CUSTOMER = 2
+    STAFF = 3
+    MANAGER = 4
+    OWNER = 5
+    ADMIN = 6
     ROLE_CHOICES = (
-        (INDIVIDUAL, "INDIVIDUAL"),
-        (MUNICIPALITY, "MUNICIPALITY"),
-        (COMPANY, "COMPANY"),
+        (USER, "USER"),
+        (CUSTOMER, "CUSTOMER"),
+        (MANAGER, "MANAGER"),
+        (OWNER, "OWNER"),
+        (ADMIN, "ADMIN"),
     )
 
     # username = None
