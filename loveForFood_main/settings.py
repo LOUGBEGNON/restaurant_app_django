@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'vendor',
     'menu',
     'marketplace',
-    'django.contrib.gis',
+    # 'django.contrib.gis',
     'customers',
     'orders',
 ]
@@ -90,14 +90,21 @@ WSGI_APPLICATION = 'loveForFood_main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         #'ENGINE': 'django.db.backends.postgresql',
+#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#         'NAME': config('DB_NAME'),
+#         'USER': config('DB_USER'),
+#         'PASSWORD': config('DB_PASSWORD'),
+#         'HOST': config('DB_HOST'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.postgresql',
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -140,7 +147,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR /'static'
 STATICFILES_DIRS = [
-    'loveForFood_main/static'
+    BASE_DIR / 'loveForFood_main/static'
 ]
 
 # Media files configuration
