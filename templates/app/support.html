@@ -35,12 +35,11 @@
               <div class="card-body">     
                   <div class="row mb-4">
                       <div class="col-lg-4 col-sm-6">
-                          
-                          
-
-
-                          <!-- End of Form -->
                       </div>
+
+                      <form method="post" action="" class="mt-4">
+                          {% csrf_token %}
+
                       <div class="col-lg-4 col-sm-6">
                           <!-- Form -->
                           <div class="mb-4">
@@ -61,7 +60,10 @@
                               <label for="formFile" class="form-label">Default file input example</label>
                               <input class="form-control" type="file" id="formFile">
                           </div>
-                          <!-- End of Form -->
+                              <div class="d-grid">
+                                    <button type="submit" name="submit" class="btn btn-gray-800">Submit</button>
+                              </div>
+                      </form>
                       </div>
 
                       </div>

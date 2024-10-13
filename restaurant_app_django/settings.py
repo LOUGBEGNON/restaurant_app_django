@@ -69,9 +69,8 @@ EMAIL_HOST_PASSWORD = "pSTXvELBzqR49NFH"
 EMAIL_PORT = 587
 # EMAIL_PORT = 465
 EMAIL_USE_TLS = True
-# EMAIL_USE_TLS = False
-# EMAIL_USE_SSL = True
-# EMAIL_USE_SSL = True
+
+FROM_EMAIL_ADDRESS = "Restaurant App <" + "amedeelougbegnon3@gmail.com" + ">"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -10,8 +10,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
-# Create your models here.
-
 logger = logging.getLogger("django")
 
 
@@ -99,7 +97,6 @@ class User(AbstractUser):
     # username = None
     email = models.EmailField(_("email address"), unique=True)
     phone_number = PhoneNumberField(_("phone number"), blank=True, max_length=128, region=None)
-
     first_login = BooleanField()
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True)
     code = models.IntegerField(null=True, blank=True)
