@@ -83,10 +83,18 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+# database & logs
+*.db
+*.sqlite3
+*.log
+logs
 
 # PyBuilder
 .pybuilder/
 target/
+# venv
+env
+venv
 
 # Jupyter Notebook
 .ipynb_checkpoints
