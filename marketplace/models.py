@@ -1,6 +1,6 @@
 from unittest.util import _MAX_LENGTH
 from django.db import models
-from accounts.models import User
+from apps.accounts.models import User
 from menu.models import FoodItem
 
 # Create your models here.

@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, UserProfile
+from apps.accounts.models import User, UserProfile
 from .validators import allow_only_images_validator
 
 class UserForm(forms.ModelForm):

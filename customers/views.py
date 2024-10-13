@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
-from accounts.forms import UserProfileForm, UserInfoForm
-from accounts.models import UserProfile
+from apps.accounts.forms import UserProfileForm, UserInfoForm
+from apps.accounts.models import UserProfile
 from django.contrib import messages
 from orders.models import Order, OrderedFood
 import simplejson as json

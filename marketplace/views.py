@@ -15,7 +15,7 @@ from django.db.models import Q
 
 from datetime import date, datetime
 from orders.forms import OrderForm
-from accounts.models import UserProfile
+from apps.accounts.models import UserProfile
 
 
 def marketplace(request):

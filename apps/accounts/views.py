@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from vendor.forms import VendorForm
 from .forms import UserForm
-from .models import User, UserProfile
+from apps.accounts.models import User, UserProfile
 from django.contrib import messages, auth
 from .utils import detectUser, send_verification_email
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -89,10 +89,14 @@ def registerVendor(request):
             user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email, password=password)
             user.role = User.VENDOR
             user.save()
+            print(user)
             vendor = v_form.save(commit=False)
+            print(vendor)
             vendor.user = user
             vendor_name = v_form.cleaned_data['vendor_name']
             vendor.vendor_slug = slugify(vendor_name)+'-'+str(user.id)
+            print(user)
+            # On n'a pas encore créer UserProfile donc ca sort une erreur il faut revoir ca
             user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
             vendor.save()

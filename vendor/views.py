@@ -3,13 +3,13 @@ from urllib import response
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http.response import HttpResponse, JsonResponse
 from .forms import VendorForm, OpeningHourForm
-from accounts.forms import UserProfileForm
+from apps.accounts.forms import UserProfileForm
 
-from accounts.models import UserProfile
+from apps.accounts.models import UserProfile
 from .models import OpeningHour, Vendor
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from accounts.views import check_role_vendor
+from apps.accounts.views import check_role_vendor
 from menu.models import Category, FoodItem
 from .utils import get_vendor
 from menu.forms import CategoryForm, FoodItemForm

@@ -6,7 +6,7 @@ from .forms import OrderForm
 from .models import Order, Payment, OrderedFood
 import simplejson as json
 from .utils import generate_order_number, order_total_by_vendor
-from accounts.utils import send_notification
+from apps.accounts.utils import send_notification
 from django.contrib.auth.decorators import login_required
 from menu.models import FoodItem
 from marketplace.models import Tax

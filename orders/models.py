@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User
+from apps.accounts.models import User
 from menu.models import FoodItem
 from vendor.models import Vendor
 import simplejson as json

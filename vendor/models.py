@@ -1,7 +1,8 @@
 from email.policy import default
 from django.db import models
-from accounts.models import User, UserProfile
-from accounts.utils import send_notification
+# from apps.accounts import User, UserProfile
+from apps.accounts.models import User, UserProfile
+from apps.accounts.utils import send_notification
 from datetime import time, date, datetime
 
 # Create your models here.

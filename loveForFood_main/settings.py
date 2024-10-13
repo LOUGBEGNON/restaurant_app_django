@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'accounts',
+    'apps.accounts',
     'vendor',
     'menu',
     'marketplace',
@@ -62,10 +62,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'loveForFood_main.urls'
 
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,12 +75,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'accounts.context_processors.get_vendor',
-                'accounts.context_processors.get_google_api',
+                'apps.accounts.context_processors.get_vendor',
+                'apps.accounts.context_processors.get_google_api',
                 'marketplace.context_processors.get_cart_counter',
                 'marketplace.context_processors.get_cart_amounts',
-                'accounts.context_processors.get_user_profile',
-                'accounts.context_processors.get_paypal_client_id',
+                'apps.accounts.context_processors.get_user_profile',
+                'apps.accounts.context_processors.get_paypal_client_id',
             ],
         },
     },

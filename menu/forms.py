@@ -1,6 +1,6 @@
 from email.mime import image
 from django import forms
-from accounts.validators import allow_only_images_validator
+from apps.accounts.validators import allow_only_images_validator
 from .models import Category, FoodItem
 
 class CategoryForm(forms.ModelForm):
